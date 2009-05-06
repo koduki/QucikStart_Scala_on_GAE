@@ -2,11 +2,10 @@
 
 == DESCRIPTION:
 
-Google App EngineでScalaを動かすさいのQuickStart.
+Google App EngineでScalaを動かす時のQuickStart.
 
 == Serverの起動
 ant runserver
 
 == GAEにアップロード
-ant deploy
-
+$APPENGINE_SDK/bin/appcfg.sh update war
