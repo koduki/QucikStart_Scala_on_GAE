@@ -9,8 +9,16 @@ class HelloServlet extends HttpServlet {
     val user = userService.getCurrentUser()
     
     if (user != null) {
-      resp.setContentType("text/plain");
-      resp.getWriter().println("Hello, " + user.getNickname() + ". " + "Wellcome Scala on GAE!");
+      resp.setContentType("text/html")
+      resp.getWriter().println(
+	<html>
+	<head><title>Hello World</title></head>
+	<body>
+	<h1>Wellcome { user.getNickname() } !</h1>
+	<p>Hello World with GAE </p>
+	</body>
+	</html>
+      )
     } else {
       resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
     }    

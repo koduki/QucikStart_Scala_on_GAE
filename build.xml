@@ -78,7 +78,7 @@
     <dev_appserver war="war" />
   </target>
   
-  <target name="update" depends="compile"
+  <target name="deploy" depends="compile"
       description="Starts the development server.">
     <appcfg action="update" war="war" />
   </target>

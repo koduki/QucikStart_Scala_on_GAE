@@ -1,0 +1,12 @@
+= Scala on GAE
+
+== DESCRIPTION:
+
+Google App EngineでScalaを動かすさいのQuickStart.
+
+== Serverの起動
+ant runserver
+
+== GAEにアップロード
+ant deploy
+
