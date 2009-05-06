@@ -1,0 +1,86 @@
+<project>
+  <property name="scala.home" location="/usr/share/scala" />
+  <property name="scala.bin" location="/usr/bin" />  
+  <property name="sdk.dir" location="/opt/appengine-java-sdk-1.2.0" />
+  <property name="sources.dir" value="${base.dir}/src" />
+  <property name="build.dir" value="${base.dir}/build"/>
+
+  <import file="${sdk.dir}/config/user/ant-macros.xml" />
+
+  <path id="project.classpath">
+    <pathelement path="war/WEB-INF/classes" />
+    <fileset dir="war/WEB-INF/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${sdk.dir}/lib">
+      <include name="shared/**/*.jar" />
+    </fileset>
+  </path>
+
+  <target name="init">
+    <property
+      name="scala-library.jar"
+      value="${scala.home}/lib/scala-library.jar"
+       />
+    <path id="build.classpath">
+      <pathelement location="${scala-library.jar}"   />
+ 
+      <pathelement location="${build.dir}"   />
+    </path>
+    <taskdef resource="scala/tools/ant/antlib.xml">
+      <classpath>
+        <pathelement location="${scala.home}/lib/scala-compiler.jar"   />
+        <pathelement location="${scala-library.jar}"   />
+      </classpath>
+    </taskdef>
+  </target>
+  
+  
+    <target name="copyscala"
+      description="Copies the App Engine JARs to the WAR.">
+    <copy
+        todir="war/WEB-INF/lib"
+        flatten="true">
+      <fileset dir="${scala.home}/lib">
+        <include name="**/scala-library.jar" />
+      </fileset>
+    </copy>
+  </target>
+
+    <target name="copyjars"
+      description="Copies the Scala JARs to the WAR.">
+    <copy
+        todir="war/WEB-INF/lib"
+        flatten="true">
+      <fileset dir="${sdk.dir}/lib/user">
+        <include name="**/*.jar" />
+      </fileset>
+    </copy>
+  </target>
+  
+    <target name="compile" depends="copyscala, copyjars, init"
+      description="Compiles Scala source and copies other source files to the WAR.">
+    <mkdir dir="war/WEB-INF/classes" />
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src">
+        <exclude name="**/*.scala" />
+      </fileset>
+    </copy>
+    <scalac
+        srcdir="src"
+        destdir="war/WEB-INF/classes"
+        classpathref="project.classpath"
+         />
+  </target>
+  
+  <target name="runserver" depends="compile"
+      description="Starts the development server.">
+    <dev_appserver war="war" />
+  </target>
+  
+  <target name="update" depends="compile"
+      description="Starts the development server.">
+    <appcfg action="update" war="war" />
+  </target>
+  
+</project>
